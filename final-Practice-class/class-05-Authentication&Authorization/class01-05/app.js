@@ -1,3 +1,6 @@
+// Install debug tool
+// npm i ndb --save-dev
+// npm run debug
 const express = require("express");
 const dotenv = require('dotenv');
 dotenv.config({path: './config.env'})
@@ -37,6 +40,7 @@ app.use(globalErrorHandler);
 
 
 // Regular Middleware
+// Handling Unhandled Routes
 app.all('*',(req, res, next)=>{
   // res.status(404).json({
   //   status: 'fail',
@@ -50,6 +54,8 @@ app.all('*',(req, res, next)=>{
 
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 })
+
+app.use(globalErrorHandler);
 
 //Error Handling Middleware
 // app.use((err, req, res, next)=> {

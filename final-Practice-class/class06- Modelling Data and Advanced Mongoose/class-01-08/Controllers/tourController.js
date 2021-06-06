@@ -33,7 +33,7 @@ exports.getAllTours = catchAsync(async(req, res, next)=> {
     // Populating (populate filled up actual guides)
     const tour = await (await Tour.findById(req.params.id)).populated({ // populate
     path:  'guides',
-    select: '-__v -passwordChangedAt'
+    select: '-__v -passwordChangedAt'  // Not show this field in DB (populate behind the scenes actually create new query)
 
     });
     // const tour = await (await Tour.findById(req.params.id)).populated('guides');

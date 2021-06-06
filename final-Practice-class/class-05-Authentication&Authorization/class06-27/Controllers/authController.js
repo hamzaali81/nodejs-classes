@@ -2,13 +2,15 @@
 // Rate limiter implementing global middleware function (number of ip's too many request) 
 // npm install --save express-rate-limit
 
+
+
 const User = require('./../Model/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const jwt = require('jsonwebtoken');
 const AppError= require('./../utils/appError');
 const sendEmail = require('./../utils/email');
 const dotenv = require('dotenv');
-const { promisify } =  require('util');
+const { promisify } =  require('util');  // node is actually build by promisify function(async functionality)
 const crypto = require('crypto');
 
 dotenv.config({ path: '../config.env' });
@@ -97,7 +99,7 @@ exports.login = catchAsync(async(req, res, next) =>{
         return next(new AppError('Please provide email and password',400))
     }
     // 2) Check if user exists && password is correct
-    const user = await User.findOne({email}).select('+password');
+    const user = await User.findOne({email}).select('+password');//(field by default not selected(+))
     // const correct =await user.correctPassword(password, user.password);
     
     // if(!user || !correct){
@@ -120,16 +122,16 @@ exports.login = catchAsync(async(req, res, next) =>{
 exports.protect = catchAsync(async(req, res, next)=> {
     let token;
     // 1)Getting token and check of it's there 
-       if(req.headers.authorization && req.headers.authorization.startsWith('')){
-            token = req.headers.authorization.split(' ')[1];
+       if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+            token = req.headers.authorization.split(' ')[1]; //convert array 1 index of array pick
         }
         console.log(token);
         if(!token){
         return new AppError('You are not logged in! Please log in to to get access', 401);
         }
     // 2)Verfication token
-  const decoded = (jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
+  const decoded =await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  console.log(decoded); //provide decode object
     // 3)Check if user still exists 
   const currentUser = await User.findById(decoded.id);
   if(!currentUser) {
@@ -146,10 +148,10 @@ exports.protect = catchAsync(async(req, res, next)=> {
   next();
 });
 
-exports.restrictTo = (...roles) => {
+exports.restrictTo = (...roles) => { // clousers in js
     return (req, res, next) =>{
         // roles ['admin','lead-guide'].role='user'
-        if(!roles.includes(req.user.role)){
+        if(!roles.includes(req.user.role)){ // js available in all arrays
             return next(new AppError('You do not have permission to perform this section'), 403)
         }
         next();
@@ -230,4 +232,4 @@ exports.updatePassword = catchAsync(async(req,res,next)=> {
     //User.findByIdAndUpdate() will NOT work as  intended!
     // 4) Log user in, send JWT
     createSendToken(user,200,res)
-})
+});

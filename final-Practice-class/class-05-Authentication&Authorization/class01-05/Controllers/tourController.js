@@ -1,3 +1,4 @@
+
 const app = require('../app');
 const AppError = require('../utils/appError');
 const Tour = require('./../Model/tourModel');
@@ -32,7 +33,7 @@ exports.getAllTours = catchAsync(async(req, res, next)=> {
     const tour = await Tour.findById(req.params.id);
     // Tour.findOne({ _id: req.params.id })
     
-    if(!tour){
+    if(!tour){ // javascript null value is false
       return next(new AppError('No tour found with that ID', 404))
     }
     res.status(200).json({

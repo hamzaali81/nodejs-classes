@@ -17,7 +17,8 @@ router
 router
 .route('/:id')
 .get(tourController.getTour)
-.patch(tourController.updateTour)
+.patch(tourController.updateTour) 
+// Middlewares implement
 .delete(authController.protect, authController.restrictTo('admin','lead-guide'), tourController.deleteTour)
 
 

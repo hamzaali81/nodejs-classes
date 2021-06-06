@@ -32,6 +32,7 @@ console.log(process.env.NODE_ENV);
 app.use(helmet());
 
 // Development requests from same API
+// Development Logging
 if(process.env.NODE_ENV === 'development'){
   app.use(morgan('dev'));
 };
@@ -41,9 +42,10 @@ if(process.env.NODE_ENV === 'development'){
 // app.set('trust proxy', 1);
 // limit request from same api
 
+//(DDOS & BRUTE FORCE ATTACK)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs(time window)(100 same ip in one hour) 
   message: 'Too many requests from this IP, please try again in an hour'
 });
 
@@ -81,7 +83,7 @@ app.use((req,res,next)=> {
 // Test Middleware
 app.use((req, res, next)=> {
   req.requestTime = new Date().toString();
-  console.log(req.headers);
+  console.log(req.headers); //test headers
   next();
   
 });

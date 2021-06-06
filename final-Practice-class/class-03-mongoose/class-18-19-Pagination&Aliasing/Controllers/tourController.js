@@ -1,5 +1,13 @@
 const Tour = require('./../Model/tourModel');
 
+
+exports.aliasTopTours = (req,res,next)=> {
+req.query.limit = '5';
+req.query.sort = '-ratingsAverage, price';
+req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+next();
+}
+
  exports.getAllTours = async (req, res)=> {
     console.log(req.requestTime);
     try {
@@ -38,14 +46,15 @@ const Tour = require('./../Model/tourModel');
        if(req.query.fields){
          const fields = req.query.fields.split(',').join(' ');  //join(Array convert in string)
     // The split() method is used to split a string into an array of substrings, and returns the new array. Tip: If an empty string ("") is used as the separator, the string is split between each character. Note: The split() method does not change the original string.
-         query = query.select(fields);
+         query = query.select(fields); // select('name price')
        }
        else {
-         query = query.select('-__v')
+         query = query.select('-__v') (Not including but excluding)(-name -price)
         }
 
-        // 4) Pagination
+        // 4) Pagination(page of results)
         // page=2&limit=10=> page 1,11-20, page 2 
+        // skip(2).limit(2)
         const page = req.query.page * 1 || 1;
         const limit = req.query.limit  * 1 || 100;
         const skip = (page -1) * limit;

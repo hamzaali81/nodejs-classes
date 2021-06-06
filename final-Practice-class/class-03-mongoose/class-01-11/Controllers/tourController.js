@@ -68,7 +68,7 @@ const Tour = require('./../Model/tourModel');
   //  const newTour = new Tour({})
   //  newTour.save()
   
-  // Tour.create({}).then()
+  // Tour.create({}).then() new+save(combine method)
   try {
 
     const newTour= await Tour.create(req.body);
@@ -120,15 +120,25 @@ const Tour = require('./../Model/tourModel');
     }
   }
   
-  exports.deleteTour = (req, res)=> {
+  exports.deleteTour = async(req, res)=> {
     // if(req.params.id * 1 > tours.length){
     //   return res.status(404).json({
     //     status: 'fail',
     //     message: 'Invalid ID'
     //   })
     // }
+    try {
+    await Tour.findOneAndDelete(req.params.id)
     res.status(200).json({
       status: "success",
       data: null,
-    });
+    })
+    }
+    catch(err){
+      res.status(404).json({
+        status: 'fail',
+        message: err
+      })
+    }
+   
   }

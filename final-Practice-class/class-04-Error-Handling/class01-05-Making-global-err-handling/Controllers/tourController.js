@@ -179,7 +179,7 @@ exports.getAllTours = async (req, res)=> {
             }
             },
             {
-            $group: {
+            $group: {  // work like accumulator
               _id: { $month: '$startDates' },
               numTourStarts: { $sum: 1 },
               tours: {$push: '$name'}

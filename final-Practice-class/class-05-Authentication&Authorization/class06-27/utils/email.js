@@ -15,8 +15,6 @@ dotenv.config({ path: '../config.env' });
             user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD
         }
-
-
     })
     // 2) Define the email options
     const mailOptions = {

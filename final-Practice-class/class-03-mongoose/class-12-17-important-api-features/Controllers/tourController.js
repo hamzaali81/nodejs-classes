@@ -9,32 +9,44 @@ const Tour = require('./../Model/tourModel');
       const excludedFields = ['page', 'sort', 'limit', 'fields'];
       excludedFields.forEach((el)=> delete queryObj[el])
       
-      // 2) Advance filtering
+      // 2) Advance filtering (using operators )
       console.log(req.query, queryObj);
       
-      const queryStr = JSON.stringify(queryObj);
+      let queryStr = JSON.stringify(queryObj);
      queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
-      console.log(JSON.parse(queryStr));
-
-      // const tours = await Tour.find(queryObj);
-      const query = Tour.find(queryObj);
       
+      console.log(JSON.parse(queryStr));
       console.log(req.query);
       // { difficulty: 'easy', duration: {$gte: 5}}
-      // { difficulty: 'easy', duration: {$gte: 5}}
-
-
+      // { difficulty: 'easy', duration: {gte: 5}}  result
+      
+      // filtering Object 01
+      // const tours = await Tour.find(queryObj);
+      const query = Tour.find(JSON.parse(queryStr));
+      
+       // Sorting
+       if(req.query.sort){
+       const sortBy = req.query.sort.split(',').join(' ');
+       query = query.sort(sortBy);
+       // sort('price ratingsAverage ') (postman?sort=price,ratingsAverage)
+       }else {
+       query = query.sort('--createdAt');
+       }
+       
+       
       // EXECUTE QUERY
       const tours = await query;
       // console.log();
       // const tours = await Tour.find(req.query);
-
+       
+      //01 Method
       // console.log(req.query) 
       // const tours = await Tour.find({
       //   duration: 5,
       //   difficulty: 'easy'
       // });
       
+      //02 Method
       // const tours = await Tour.find()
       // .where('duration')
       // .equals(5)

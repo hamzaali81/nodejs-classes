@@ -23,9 +23,10 @@ const server= app.listen(port, () => {
 });
 
 
+//unhandledRejection(database password error)
 
 process.on('unhandledRejection', (err)=> {
-  console.log(err.name, err.message);
+  console.log(err.name, err.message); // default node.js error
   console.log('UNHANDLER REJECTION! Shutting down...');
   server.close(()=>{
     process.exit(1); // 0 for success 1 for uncaught exception

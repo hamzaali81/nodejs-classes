@@ -46,6 +46,7 @@ const tourSchema = new mongoose.Schema({
     },
     priceDiscount: {
     type: Number,
+    // create own validators
     validate: {
       validator: function(val){
         // This only points to current doc on NEW document creation
@@ -122,7 +123,7 @@ tourSchema.post(/^find/,function(next){
 // Aggregation Middleware
 tourSchema.pre('aggregate', function(next){
   this.pipeline().unshift({ $match: {secretTour: {$ne: true}} })
-  console.log(this.pipeline());
+  console.log(this.pipeline());  // provide aggregate object
   next();
 })
 

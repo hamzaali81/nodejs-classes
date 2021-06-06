@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// trim: If truthy, Mongoose will add a custom setter that removes leading and trailing whitespace using JavaScript's built-in String#trim().
 
 const tourSchema = new mongoose.Schema({
     name: {

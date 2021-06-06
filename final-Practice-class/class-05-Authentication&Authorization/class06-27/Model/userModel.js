@@ -25,14 +25,14 @@ const userSchema = new mongoose.Schema({
     photo: String,
     role: {
     type: String,
-    enum: ['user','guide', 'lead-guide','admin'],
+    enum: ['user','guide', 'lead-guide','admin'], //check value
     default: 'user'
     },
     password: {
     type: String,
     required: [true, 'Please provide a password'],
     minlength: 8,
-    select: false // Important in security
+    select: false // Important in security(Not show in any output)
     },
     passwordConfirm: {
         type: String,
@@ -69,8 +69,9 @@ userSchema.pre('save', (async function(next) {
     next();
 }));
 
+// Password Reset functionality
 userSchema.pre('save', function(next){
-  if(!this.isModified('password') || this.isNew) return next();
+  if(!this.isModified('password') || this.isNew) return next();  // isNEw mongoose method
 
   this.passwordChangedAt = Date.now() - 1000;  // this is important logic
   next();
@@ -82,14 +83,16 @@ userSchema.pre(/^find/, function(next){
   next();
 });
 
+// Instance Method (use login)
 userSchema.methods.correctPassword = async function(candidatePassword, userPassword){
-    return await bcrypt.compare(candidatePassword, userPassword);
+    return await bcrypt.compare(candidatePassword, userPassword); //compare password
 }
 
 
 userSchema.methods.changedPasswordAfter = function(JWTTimestamp){
+// By default false
    if(this.passwordChangedAt){
-       const changedTimestamp = parseInt(this.passwordChangedAt.getTime()/1000);
+       const changedTimestamp = parseInt(this.passwordChangedAt.getTime()/1000, 10); //(Base 10)
        console.log(changedTimestamp, JWTTimestamp);
        return JWTTimestamp < changedTimestamp; // 300 < 200
    }
@@ -97,6 +100,7 @@ userSchema.methods.changedPasswordAfter = function(JWTTimestamp){
    return false;
 }
 
+// Instance method reset password
 userSchema.methods.createPasswordResetToken=function(){
     const resetToken = crypto.randomBytes(32).toString('hex');
       

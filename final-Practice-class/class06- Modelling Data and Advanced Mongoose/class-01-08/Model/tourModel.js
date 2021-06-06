@@ -83,6 +83,7 @@ const tourSchema = new mongoose.Schema({
       type: Boolean ,
       default: false
     },
+    //Geospatial data
     startLocation: { // this object as embedded object
 //       To specify GeoJSON data, use an embedded document with:
 
@@ -103,6 +104,7 @@ const tourSchema = new mongoose.Schema({
     address: String,
     description: String,
     },
+    //Embedding Documents
     locations: [
       {
       type: {
@@ -118,6 +120,8 @@ const tourSchema = new mongoose.Schema({
 
   // Modelling Tour Guides Embedding
   // guides: Array,
+  
+  // Modelling Child Refrencing
   guides: [
     // Populate
     {
@@ -144,8 +148,9 @@ tourSchema.pre('save', function(next){
 });
 
 tourSchema.pre('save',async function(next){
-  const guides = this.guides.map(async id => User.findById(id));
- this.guides = await Promise.all(guides)
+// Tour guides [user id]
+  const guidesPromises = this.guides.map(async id =>await User.findById(id));
+ this.guides = await Promise.all(guidesPromises)
   next();
 })
 tourSchema.pre('save', function(next){
@@ -166,6 +171,7 @@ tourSchema.pre(/^find/,function(next){
    next();
 });
 
+// guides in populate
 tourSchema.pre(/^find/, function(next){
 // step 02
   this.populate({
