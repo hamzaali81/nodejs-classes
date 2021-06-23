@@ -1,0 +1,13 @@
+1.data aggregation in mongodb
+2.Unwinding & projecting
+3.ndb nodejs debugging tool (debug: "ndb server.js")
+
+//1.Authentication
+bycryptjs
+
+//2.Note
+// restful api should be stateless
+
+//3.jwt
+// payload simple object store inside a token
+// Secrect in string
