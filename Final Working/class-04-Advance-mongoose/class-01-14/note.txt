@@ -1,0 +1,62 @@
+1.data aggregation in mongodb
+2.Unwinding & projecting
+3.ndb nodejs debugging tool (debug: "ndb server.js")
+
+//1.Authentication
+bycryptjs
+
+//2.Note
+// restful api should be stateless
+
+//3.jwt
+// payload simple object store inside a token
+// Secrect in string
+
+//4. util
+const { promisify } = require('util');  // see docs
+
+
+//5.Role of admin
+// Create special routes working
+
+//6.validateBeforeSave: false (docs read)
+
+
+//7. Sending Email Service
+// nodemailer
+// free mail services mailtrap.io
+
+//8. mail services
+// sendGrid & mailGun
+
+
+//9. Data Sanitization 
+// To clean all code in malicious code 
+
+// Postman
+//Signup
+// {
+//     "name": "admin",
+//     "email": "admin@gmail.com",
+//     // "role": "user",
+//     "password": "ham123HAM",
+//     "passwordConfirm": "ham123HAM"
+// }
+
+// {
+//     "name": "<div id='bad-code'>Name</div>",
+//     "email": "user2@gmail.com",
+//     // "role": "user",
+//     "password": "ham123HAM",
+//     "passwordConfirm": "ham123HAM"
+// }
+
+//login
+ // "email": {"$gt": ""},
+    // "password": "ham123HAM"
+
+// Advance mongoose feature virtual populate 
+
+// POST /tour/326478678/reviews
+
+// Advance mongoose feature mergeParams
